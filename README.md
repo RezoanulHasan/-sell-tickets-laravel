@@ -40,3 +40,7 @@ API for managing trips and tickets
 - **Method:** `GET`
 - **Description:** Show all trips information
 
+## Run locally 
+- Clone the repository
+- npm install
+- php artisan serve
