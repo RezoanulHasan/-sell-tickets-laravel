@@ -13,15 +13,14 @@ use App\Http\Controllers\TicketController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-
+//Route::get('/', function () {
+    //return view('welcome');
+//});
 
 
 Route::get('/trip/form', [TicketController::class, 'showForm'])->name('trip.form');
 Route::post('/trip/store', [TicketController::class, 'storeTrip'])->name('trip.store');
 Route::get('/trip/seats', [TicketController::class, 'showAvailableSeats'])->name('trip.seats');
 Route::post('/trip/purchase', [TicketController::class, 'purchaseTicket'])->name('trip.purchase');
-
+Route::get('/trips', [TicketController::class, 'showAllTrips'])->name('trips.index');

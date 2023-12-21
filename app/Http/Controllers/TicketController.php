@@ -30,18 +30,49 @@ class TicketController extends Controller
         return redirect()->route('trip.form')->with('success', 'Trip created successfully!');
     }
 
-    public function showAvailableSeats(Request $request)
-    {
-        $request->validate([
-            'trip_id' => 'required|exists:trips,id',
-        ]);
 
-        $trip = Trip::findOrFail($request->input('trip_id'));
-        $availableSeats = $this->getAvailableSeats($trip);
 
-        return view('ticket.available_seats', compact('trip', 'availableSeats'));
-    }
+// TicketController.php
 
+
+
+
+public function showAvailableSeats(Request $request)
+{
+    $request->validate([
+        'trip_id' => 'required|exists:trips,id',
+    ]);
+
+    $trip = Trip::findOrFail($request->input('trip_id'));
+    $availableSeats = $this->getAvailableSeats($trip);
+    $bookedSeats = $this->getBookedSeats($trip);
+
+    return view('ticket.available_seats', compact('trip', 'availableSeats', 'bookedSeats'));
+}
+
+
+private function getAvailableSeats(Trip $trip)
+{
+    $totalSeats = 36;
+    $allocatedSeats = $trip->seatAllocations->pluck('seat_number')->toArray();
+    $availableSeats = array_diff(range(1, $totalSeats), $allocatedSeats);
+
+    return $availableSeats;
+}
+
+
+private function getBookedSeats(Trip $trip)
+{
+    return $trip->seatAllocations->pluck('seat_number')->toArray();
+}
+
+
+
+
+
+
+
+    
     public function purchaseTicket(Request $request)
     {
         $request->validate([
@@ -61,12 +92,12 @@ class TicketController extends Controller
         return view('ticket.purchase_confirmation', compact('user'));
     }
 
-    private function getAvailableSeats(Trip $trip)
-    {
-        $totalSeats = 36;
-        $allocatedSeats = $trip->seatAllocations->pluck('seat_number')->toArray();
-        $availableSeats = array_diff(range(1, $totalSeats), $allocatedSeats);
+ 
 
-        return $availableSeats;
-    }
+
+    public function showAllTrips()
+{
+    $trips = Trip::with('location')->get();
+    return view('ticket.all_trips', compact('trips'));
+}
 }

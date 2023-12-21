@@ -14,5 +14,6 @@
     </header>
 
     @yield('content')
+    <a href="{{ route('trips.index') }}">All Trips</a>
 </body>
 </html>
