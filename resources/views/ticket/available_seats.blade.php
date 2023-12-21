@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container mx-auto mt-8">
-        <h2 class="text-3xl font-semibold mb-4">Available Seats for {{ $trip->location->name }} on {{ $trip->trip_date }}</h2>
+        <h2 class="text-3xl   text-green-500 font-semibold mb-4">Available Seats for {{ $trip->location->name }} on {{ $trip->trip_date }}</h2>
 
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 mb-4 rounded">
@@ -21,7 +21,12 @@
         <div class=" mb-6">
             <div class="">
                 @if(count($availableSeats) > 0)
-                    <p class="text-lg">Available Seat Numbers: {{ implode(', ', $availableSeats) }}</p>
+                <p class="text-lg font-semibold mb-2">Available Seat Numbers:</p>
+<div class="flex flex-wrap gap-2">
+    @foreach($availableSeats as $seatNumber)
+        <span class="bg-blue-500 text-white px-3 py-1 rounded-full">{{ $seatNumber }}</span>
+    @endforeach
+</div>
                 @else
                     <p class="text-lg text-gray-600">No available seats for this trip.</p>
                 @endif
@@ -41,7 +46,7 @@
                         @endforeach
                     </ul>
                 @else
-                    <p class="text-lg text-gray-600">No seats are booked for this trip yet.</p>
+                    <p class="text-lg mb-5 font-bold text-green-600">No seats are booked for this trip yet.</p>
                 @endif
             </div>
         </div>
@@ -51,7 +56,7 @@
 
             <input type="hidden" name="trip_id" value="{{ $trip->id }}">
 
-            <div class="mb-4">
+            <div class="mb-4 ">
                 <label for="seat_number" class="block text-gray-600 text-sm mb-2">Select Seat:</label>
                 <select name="seat_number" id="seat_number" class="form-select w-full">
                     @foreach($availableSeats as $seat)
@@ -62,16 +67,16 @@
 
             <div class="mb-4">
                 <label for="user_name" class="block text-gray-600 text-sm mb-2">Your Name:</label>
-                <input type="text" name="user_name" id="user_name" class="form-input w-full" required>
+                <input type="text" name="user_name" id="user_name" class="form-input text-white bg-black w-full" required>
             </div>
 
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300">
+            <button type="submit" class="bg-blue-500 text-white px-2 py-2 rounded-full hover:bg-blue-600 transition duration-300">
                 Purchase Ticket
             </button>
         </form>
 
         @if(count($availableSeats) === 0 && count($bookedSeats) === 0)
-            <p class="text-red-500 mt-6 text-center">Sorry, no seats are available for this trip.</p>
+            <p class="text-red-500 mt-6    text-center">Sorry, no seats are available for this trip.</p>
         @endif
     </div>
 @endsection

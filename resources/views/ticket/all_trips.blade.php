@@ -12,13 +12,13 @@
 
 
         @if(count($trips) > 0)
-            <ul class="list-disc pl-4">
+            <ul class="list-disc   bg-black pl-10">
                 @foreach($trips as $trip)
                     <li class="mb-4">
-                        <div class="bg-white rounded-md p-4 shadow-md">
+                        <div class="bg-yellow-100 rounded-md p-3 shadow-md">
                             <p class="text-lg font-semibold mb-2">{{ $trip->location->name }}</p>
-                            <p class="text-gray-600">on {{ $trip->trip_date }}</p>
-                            <a href="{{ route('trip.seats', ['trip_id' => $trip->id]) }}" class="text-blue-500 hover:underline">View Seats</a>
+                            <p class="text-red-600">on {{ $trip->trip_date }}</p>
+                            <a href="{{ route('trip.seats', ['trip_id' => $trip->id]) }}" class="text-green-500 hover:underline">View Seats</a>
                         </div>
                     </li>
                 @endforeach
