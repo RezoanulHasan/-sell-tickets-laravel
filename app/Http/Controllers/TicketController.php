@@ -61,43 +61,77 @@ private function getAvailableSeats(Trip $trip)
 }
 
 
+//private function getBookedSeats(Trip $trip)
+//{
+   // return $trip->seatAllocations->pluck('seat_number')->toArray();
+//}
+
+
+
+
+// In TicketController.php
+
 private function getBookedSeats(Trip $trip)
 {
-    return $trip->seatAllocations->pluck('seat_number')->toArray();
+    return $trip->seatAllocations->map(function ($allocation) {
+        return [
+            'seat_number' => $allocation->seat_number,
+            'user' => $allocation->user,
+        ];
+    })->toArray();
 }
 
 
 
 
+public function purchaseTicket(Request $request)
+{
+    $request->validate([
+        'user_name' => 'required|string',
+        'trip_id' => 'required|exists:trips,id',
+        'seat_number' => 'required|integer',
+    ]);
 
+    $user = User::create(['name' => $request->input('user_name')]);
 
+    // Check if the selected seat is available
+    $trip = Trip::findOrFail($request->input('trip_id'));
+    $availableSeats = $this->getAvailableSeats($trip);
+    $selectedSeat = $request->input('seat_number');
 
-    
-    public function purchaseTicket(Request $request)
-    {
-        $request->validate([
-            'user_name' => 'required|string',
-            'trip_id' => 'required|exists:trips,id',
-            'seat_number' => 'required|integer',
-        ]);
-
-        $user = User::create(['name' => $request->input('user_name')]);
-
-        SeatAllocation::create([
-            'user_id' => $user->id,
-            'trip_id' => $request->input('trip_id'),
-            'seat_number' => $request->input('seat_number'),
-        ]);
-
-        return view('ticket.purchase_confirmation', compact('user'));
+    if (!in_array($selectedSeat, $availableSeats)) {
+        return redirect()->back()->with('error', 'Selected seat is no longer available. Please choose another seat.');
     }
 
+    SeatAllocation::create([
+        'user_id' => $user->id,
+        'trip_id' => $request->input('trip_id'),
+        'seat_number' => $selectedSeat,
+    ]);
+
+    return redirect()->route('trip.seats', ['trip_id' => $request->input('trip_id')])
+                    ->with('success', 'Seat booked successfully! Seat number: ' . $selectedSeat);
+}
+
+
  
+
+
+
+
+
+
+
+
+
 
 
     public function showAllTrips()
 {
     $trips = Trip::with('location')->get();
     return view('ticket.all_trips', compact('trips'));
+
+
+
 }
 }
