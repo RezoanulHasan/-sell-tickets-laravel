@@ -18,7 +18,10 @@ Route::get('/', function () {
 });
 
 
+
+
 Route::get('/trip/form', [TicketController::class, 'showForm'])->name('trip.form');
-Route::post('/trip/store', [TicketController::class, 'storeTrip']);
-Route::get('/trip/seats', [TicketController::class, 'showAvailableSeats']);
-Route::post('/trip/purchase', [TicketController::class, 'purchaseTicket']);
+Route::post('/trip/store', [TicketController::class, 'storeTrip'])->name('trip.store');
+Route::get('/trip/seats', [TicketController::class, 'showAvailableSeats'])->name('trip.seats');
+Route::post('/trip/purchase', [TicketController::class, 'purchaseTicket'])->name('trip.purchase');
+
