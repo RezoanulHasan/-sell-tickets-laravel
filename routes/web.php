@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\TicketController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/trip/form', [TicketController::class, 'showForm'])->name('trip.form');
+Route::post('/trip/store', [TicketController::class, 'storeTrip']);
+Route::get('/trip/seats', [TicketController::class, 'showAvailableSeats']);
+Route::post('/trip/purchase', [TicketController::class, 'purchaseTicket']);

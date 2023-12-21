@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Location;
 use App\Models\Trip;
 use App\Models\SeatAllocation;
-
+use App\Models\User;
 class TicketController extends Controller
 {
     public function showForm()
